@@ -18,5 +18,6 @@ import { ConfigModule } from '@nestjs/config';
       signOptions: { expiresIn: jwtConstants.tokenExpiresIn },
     }),
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

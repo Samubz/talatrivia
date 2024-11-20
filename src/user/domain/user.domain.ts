@@ -8,4 +8,5 @@ export class UserDomain {
   createdAt: Date;
   updatedAt: Date | null;
   deletedAt: Date | null;
+  permissions: string[];
 }

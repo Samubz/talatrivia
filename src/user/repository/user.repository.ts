@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IUserRepository } from './user.repository.interface';
-import { User as PrismaUser } from '@prisma/client'; // Usa los tipos generados por Prisma
+import { IUserRepository } from './user.repository.interface'; 
 import { PrismaService } from '@src/prisma/prisma.service';
 import { UserDomain } from '../domain/user.domain';
+import { FindUserByEmailResponse } from './user.repository.type';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -13,11 +13,14 @@ export class UserRepository implements IUserRepository {
       where: {
         email,
       },
+      include: {
+        profile: true,
+      },
     });
     return this.toDomain(user);
   }
 
-  private toDomain(prismaUser: PrismaUser | null): UserDomain | null {
+  private toDomain(prismaUser: FindUserByEmailResponse | null): UserDomain | null {
     if (!prismaUser) return null;
     return {
       id: prismaUser.id,
@@ -29,6 +32,7 @@ export class UserRepository implements IUserRepository {
       createdAt: prismaUser.createdAt,
       updatedAt: prismaUser.updatedAt,
       deletedAt: prismaUser.deletedAt,
+      permissions: prismaUser.profile.permissions || [],
     };
   }
 }
