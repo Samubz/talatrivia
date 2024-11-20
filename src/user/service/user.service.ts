@@ -1,6 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IUserService } from './user.service.interface';
-import { IUserRepository, USER_REPOSITORY_TOKEN } from '../repository/user.repository.interface';
+import {
+  IUserRepository,
+  USER_REPOSITORY_TOKEN,
+} from '../repository/user.repository.interface';
+import { UserDomain } from '../domain/user.domain';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -11,5 +16,9 @@ export class UserService implements IUserService {
 
   async findByEmail(email: string) {
     return this.userRepository.findByEmail(email);
+  }
+
+  async create(data: CreateUserDto) {
+    return this.userRepository.create(data);
   }
 }

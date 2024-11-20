@@ -10,7 +10,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() loginDto: LoginRequestDto): Promise<{ token: string }> {
+  async signIn(@Body() loginDto: LoginRequestDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(loginDto);
   }
 }

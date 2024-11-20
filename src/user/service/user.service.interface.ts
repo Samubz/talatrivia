@@ -1,7 +1,9 @@
-import { UserDomain } from '../domain/user.domain'; 
+import { UserDomain } from '../domain/user.domain';
+import { CreateUserDto } from '../dto/create-user.dto';
 
-export interface IUserService { 
-  findByEmail(email: string): Promise<UserDomain|null>;
+export interface IUserService {
+  findByEmail(email: string): Promise<UserDomain | null>;
+  create(data: CreateUserDto): Promise<UserDomain | null>;
 }
 
 export const USER_SERVICE_TOKEN = 'USER_SERVICE';

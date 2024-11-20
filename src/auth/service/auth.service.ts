@@ -26,8 +26,8 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
     }
-    const token = this.generateToken(user);
-    return { token };
+    const accessToken = this.generateToken(user);
+    return { accessToken };
   }
   private generateToken = ({ id, name, email, permissions }: UserDomain) => {
     return this.jwtService.sign({
