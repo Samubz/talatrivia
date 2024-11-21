@@ -4,8 +4,11 @@ import {
   IUserRepository,
   USER_REPOSITORY_TOKEN,
 } from '../repository/user.repository.interface';
-import { UserDomain } from '../domain/user.domain';
 import { CreateUserDto } from '../dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import { PASSWORD_SALT_BCRYPT } from '@src/auth/constants/bcrypt.constants';
+import { ResponseErrorMessage } from '../constants/response-message.constants';
+import { ListUsersDTO } from '../dto/list-users.dto';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -19,6 +22,23 @@ export class UserService implements IUserService {
   }
 
   async create(data: CreateUserDto) {
-    return this.userRepository.create(data);
+    const {password} = data;
+    const hashPassword = await this.hashPassword(password);
+    return this.userRepository.create({
+      ...data,
+      password: hashPassword,
+    });
+  }
+
+  async list(listUsersDto: ListUsersDTO){
+    return this.userRepository.list(listUsersDto);
+  }
+
+  private async hashPassword(password: string) {
+    try {
+      return await bcrypt.hash(password, PASSWORD_SALT_BCRYPT);
+    } catch (error) {
+      throw new Error(ResponseErrorMessage.ERROR_CREATING_PASSWORD);
+    }
   }
 }

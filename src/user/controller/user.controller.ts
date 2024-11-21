@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { PermissionsMap } from '@src/auth/domain/permission.domain';
 import { Permissions } from '@core/decorators/permissions.decorator';
@@ -8,6 +8,8 @@ import {
 } from '../service/user.service.interface';
 import { UserControllerType } from './user.controller.type';
 import { UserDomain } from '../domain/user.domain';
+import { ListUsersDTO } from '../dto/list-users.dto';
+import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
 
 @Controller('users')
 export class UserController {
@@ -24,6 +26,20 @@ export class UserController {
     return this.toController(user);
   }
 
+  @Permissions(PermissionsMap.LIST_USERS)
+  @Get()
+  async get(@Query() listUsersDto: ListUsersDTO): Promise<PaginationResponse> {
+    const paginationResponse = await this.userService.list(listUsersDto);
+    const { users: userResponse, ...rest } = paginationResponse;
+    const users = (userResponse as UserDomain[]).map((user) =>
+      this.toController(user),
+    ) as UserControllerType[];
+    return {
+      users,
+      ...rest,
+    };
+  }
+
   private toController(
     domainElement: UserDomain | null,
   ): UserControllerType | null {
@@ -37,7 +53,6 @@ export class UserController {
       createdAt: domainElement.createdAt,
       updatedAt: domainElement.updatedAt,
       deletedAt: domainElement.deletedAt,
-      permissions: domainElement?.permissions || [],
     };
   }
 }

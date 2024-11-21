@@ -12,6 +12,7 @@ export const PermissionsMap = {
   GET_TRIVIA_RANKING: 'GET_TRIVIA_RANKING',
   GET_TRIVIA_SCORE: 'GET_TRIVIA_SCORE',
   ANSWER_TRIVIA: 'ANSWER_TRIVIA',
+  LIST_USERS: 'LIST_USERS',
 } as const;
 
 export type PermissionsDomain =

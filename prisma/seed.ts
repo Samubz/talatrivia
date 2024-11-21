@@ -1,5 +1,7 @@
 import { PrismaClient, ProfileType } from '@prisma/client';
 import { ProfilesInfo,AdminUserInfo } from './seedInfo';
+import { PASSWORD_SALT_BCRYPT } from '../src/auth/constants/bcrypt.constants';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -19,10 +21,16 @@ async function main() {
     if(!adminProfile){
         throw new Error("Admin user not found")
     }
+
+    const hashPassword = await bcrypt.hash(
+      AdminUserInfo.password,
+      PASSWORD_SALT_BCRYPT,
+    );
     await prisma.user.create({
       data: {
         profileId: adminProfile.id,
         ...AdminUserInfo,
+        password: hashPassword,
       },
     });
 

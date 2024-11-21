@@ -21,6 +21,7 @@ export const ProfilesInfo: Omit<Profile, 'id'>[] = [
       Permissions.GET_TRIVIA_RANKING,
       Permissions.GET_TRIVIA_SCORE,
       Permissions.ANSWER_TRIVIA,
+      Permissions.LIST_USERS,
     ],
   },
   {
@@ -40,7 +41,7 @@ export const ProfilesInfo: Omit<Profile, 'id'>[] = [
 export const AdminUserInfo: Omit<User, 'id' | 'profileId'> = {
   email: 'admin@email.com',
   name: 'Admin User',
-  password: '85b5fb13c2a6ac113e0e54730b78e52b60ba6c72838002636106dcbcd38a6554',
+  password: 'Password-Admin1',
   isActive: true,
   createdAt: new Date(),
   updatedAt: new Date(),
