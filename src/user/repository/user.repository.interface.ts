@@ -12,6 +12,7 @@ export interface IUserRepository {
   ): Promise<UserDomain | null>;
   list(listUsersDto: ListUsersDTO): Promise<PaginationResponse>;
   validateUserIds(ids: string[]): Promise<boolean>;
+  getUsers(ids: string[]): Promise<UserDomain[]>;
 }
 
 export const USER_REPOSITORY_TOKEN = 'USER_REPOSITORY';

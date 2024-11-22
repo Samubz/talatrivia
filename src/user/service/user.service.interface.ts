@@ -7,6 +7,7 @@ export interface IUserService {
   findByEmail(email: string): Promise<UserDomain | null>;
   create(data: CreateUserDto): Promise<UserDomain | null>;
   list(listUsersDto: ListUsersDTO): Promise<PaginationResponse>;
+  getUsers(ids: string[]): Promise<UserDomain[]>;
 }
 
 export const USER_SERVICE_TOKEN = 'USER_SERVICE';

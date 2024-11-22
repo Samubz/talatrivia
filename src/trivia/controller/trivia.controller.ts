@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Post,
   Query,
   Request,
@@ -70,6 +71,17 @@ export class TriviaController {
         users,
         ...rest,
       };
+    } catch (error) {
+      validateErrors(error, TriviaController.name, ResponseErrorMessage);
+    }
+  }
+  @Permissions(PermissionsMap.LIST_TRIVIA_USER)
+  @Get(':triviaId/ranking')
+  async getRanking(
+    @Param('triviaId') triviaId: string
+  ): PromiseResponse<PaginationResponse> {
+    try {
+     return this.triviaService.getRanking(triviaId);
     } catch (error) {
       validateErrors(error, TriviaController.name, ResponseErrorMessage);
     }

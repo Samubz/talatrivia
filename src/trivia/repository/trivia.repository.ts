@@ -3,7 +3,7 @@ import {
   PrismaTransactionClient,
 } from '@src/prisma/prisma.service';
 import { ITriviaRepository } from './trivia.repository.interface';
-import { TriviaDomain } from '../domain/trivia.domain';
+import { RankingDomain, TriviaDomain } from '../domain/trivia.domain';
 import { CreateTriviaDto } from '../dto/create-trivia.dto';
 import { Injectable } from '@nestjs/common';
 import {
@@ -145,7 +145,48 @@ export class TriviaRepository implements ITriviaRepository {
     });
     return Boolean(userOnTrivia);
   }
-  getWhereAndPaginationListTrivia(params: IListTriviaParams) {
+
+  async getRanking(triviaId: string): Promise<RankingDomain[]> {
+    const triviaQuestionsCount = await this.prisma.questionOnTrivia.count({
+      where: {
+        triviaId: triviaId,
+      },
+    });
+    const userAnswers = await this.prisma.answer.groupBy({
+      by: ['userId'],
+      where: {
+        triviaId: triviaId,
+      },
+      _count: {
+        questionId: true,
+      },
+    }); 
+    const completedUsers = userAnswers.filter(
+      (user) => user._count.questionId === triviaQuestionsCount
+    );
+    const ranking = await Promise.all(
+      completedUsers.map(async (user) => {
+        const totalScore = await this.prisma.answer.aggregate({
+          where: {
+            userId: user.userId,
+            triviaId: triviaId,
+          },
+          _sum: {
+            score: true,
+          },
+        });
+    
+        return {
+          userId: user.userId,
+          totalScore: totalScore._sum.score || 0,
+        };
+      })
+    );
+    ranking.sort((a, b) => b.totalScore - a.totalScore);
+    return ranking;
+  }
+
+  private getWhereAndPaginationListTrivia(params: IListTriviaParams) {
     const { name = '', userId = '', page, limit } = params;
 
     const skipElements = page && limit ? (page - 1) * limit : undefined;

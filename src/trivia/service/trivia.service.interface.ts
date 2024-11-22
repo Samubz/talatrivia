@@ -6,5 +6,6 @@ import { ListTriviaDTO } from "../dto/list-trivia.dto";
 export interface ITriviaService {
   create(data: CreateTriviaDto): Promise<TriviaDomain | null>;
   list(listTriviaDto: ListTriviaDTO): Promise<PaginationResponse>;
+  getRanking(triviaId: string): Promise<any>;
 }
 export const TRIVIA_SERVICE_TOKEN = 'TRIVIA_SERVICE';

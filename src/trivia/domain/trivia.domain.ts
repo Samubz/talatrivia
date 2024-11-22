@@ -6,3 +6,9 @@ export class TriviaDomain {
   description?: string;
   questions: QuestionDomain[];
 }
+
+export class RankingDomain {
+  userId: string;
+  name?: string;
+  totalScore: number;
+}

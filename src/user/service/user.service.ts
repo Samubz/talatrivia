@@ -13,6 +13,7 @@ import {
   IProfileRepository,
   PROFILE_REPOSITORY_TOKEN,
 } from '../repository/profile.repository.interface';
+import { UserDomain } from '../domain/user.domain';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -42,6 +43,10 @@ export class UserService implements IUserService {
       },
       profile,
     );
+  }
+
+  async getUsers(ids: string[]): Promise<UserDomain[]> {
+      return this.userRepository.getUsers(ids);
   }
 
   async list(listUsersDto: ListUsersDTO) {

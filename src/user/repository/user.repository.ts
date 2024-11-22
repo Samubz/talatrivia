@@ -93,11 +93,23 @@ export class UserRepository implements IUserRepository {
     const usersCount = await this.prisma.user.count({
       where: {
         id: { in: userIds },
-        ...CONDITIONAL_EXIST
+        ...CONDITIONAL_EXIST,
       },
     });
 
     return userIds.length === usersCount;
+  }
+
+  async getUsers(ids: string[]): Promise<UserDomain[]> {
+    const users = await this.prisma.user.findMany({
+      where: {
+        id: { in: ids },
+      },
+      include: {
+        profile: true,
+      },
+    });
+    return users.map((user) => this.toDomain(user)) as UserDomain[];
   }
 
   getWhereAndPaginationListUsers(params: IListUsersParams) {

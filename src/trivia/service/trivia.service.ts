@@ -12,10 +12,11 @@ import {
   IQuestionRepository,
   QUESTION_REPOSITORY_TOKEN,
 } from '@src/question/repository/question.repository.interface';
-import { TriviaDomain } from '../domain/trivia.domain';
+import { RankingDomain, TriviaDomain } from '../domain/trivia.domain';
 import { CreateTriviaDto } from '../dto/create-trivia.dto';
 import { ResponseErrorMessage } from '../constants/response-message.constants';
 import { ListTriviaDTO } from '../dto/list-trivia.dto';
+import { UserDomain } from '@src/user/domain/user.domain';
 
 @Injectable()
 export class TriviaService implements ITriviaService {
@@ -47,5 +48,23 @@ export class TriviaService implements ITriviaService {
 
   async list(listTriviaDto:ListTriviaDTO) {
     return this.triviaRepository.list(listTriviaDto);
+  }
+  async getRanking(triviaId: string): Promise<RankingDomain[]> {
+      const ranking = await this.triviaRepository.getRanking(triviaId);
+      const users = await this.userRepository.getUsers(
+        ranking.map((r) => r.userId),
+      );
+      return ranking.map(({ userId, totalScore }) => ({
+        userId,
+        totalScore,
+        name: this.getUserName(userId, users),
+      }));
+  }
+  private getUserName(userId:string,users: UserDomain[]  ){
+    const user = users.find(user=>user.id===userId)
+    if(user){
+      return user.name
+    }
+    return ''
   }
 }
