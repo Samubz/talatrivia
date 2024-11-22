@@ -17,6 +17,7 @@ import { ListUsersDTO } from '../dto/list-users.dto';
 import { CONDITIONAL_EXIST } from '@core/constants/where-prisma.constants';
 import { getPrevNextPagination } from '@core/utils/pagination-prev-next-response.util';
 import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
+import { createInsensitiveSearch } from '@core/utils/create-insensitive-search.util';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -31,6 +32,7 @@ export class UserRepository implements IUserRepository {
     const user = await this.prisma.user.findFirst({
       where: {
         email,
+        ...CONDITIONAL_EXIST,
       },
       include: {
         profile: true,
@@ -69,7 +71,7 @@ export class UserRepository implements IUserRepository {
     const users = usersResponse.map((user) =>
       this.toDomain(user),
     ) as UserDomain[];
-    
+
     if (
       !whereAndPagination.take ||
       whereAndPagination.skip === undefined ||
@@ -96,17 +98,6 @@ export class UserRepository implements IUserRepository {
     };
   }
 
-  createInsensitiveSearch(
-    property: string,
-    searchText: string,
-  ):
-    | { [key: string]: Prisma.StringNullableFilter | Prisma.StringFilter }
-    | object {
-    return searchText.length
-      ? { [property]: { contains: searchText, mode: 'insensitive' } }
-      : {};
-  }
-
   getWhereAndPaginationListUsers(params: IListUsersParams) {
     const { name = '', page, limit } = params;
 
@@ -114,8 +105,7 @@ export class UserRepository implements IUserRepository {
 
     const whereInput: Prisma.UserWhereInput = {
       ...CONDITIONAL_EXIST,
-      ...(name.length &&
-        this.createInsensitiveSearch('name', name)),
+      ...(name.length && createInsensitiveSearch('name', name)),
     };
     const pagination: Prisma.UserFindManyArgs = {
       take: limit,
@@ -148,6 +138,7 @@ export class UserRepository implements IUserRepository {
       deletedAt: prismaUser.deletedAt,
       permissions:
         (prismaUser as FindUserByEmailResponse).profile?.permissions || [],
+      profile: (prismaUser as FindUserByEmailResponse).profile?.type,
     };
   }
 }

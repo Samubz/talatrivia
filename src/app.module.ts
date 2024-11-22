@@ -9,6 +9,7 @@ import configuration from '@core/config/configuration';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { PermissionGuard } from '@core/guards/permission.guard';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PermissionGuard } from '@core/guards/permission.guard';
     PrismaModule,
     AuthModule,
     UserModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [

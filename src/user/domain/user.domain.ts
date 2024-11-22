@@ -1,3 +1,5 @@
+import { ProfileTypeDomain } from "./role.domain";
+
 export class UserDomain {
   id: string;
   email: string;
@@ -9,4 +11,5 @@ export class UserDomain {
   updatedAt: Date | null;
   deletedAt: Date | null;
   permissions: string[];
+  profile:ProfileTypeDomain
 }

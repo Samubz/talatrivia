@@ -1,5 +1,5 @@
 import { PrismaClient, ProfileType } from '@prisma/client';
-import { ProfilesInfo,AdminUserInfo } from './seedInfo';
+import { ProfilesInfo, AdminUserInfo, QuestionLevelInfo } from './seedInfo';
 import { PASSWORD_SALT_BCRYPT } from '../src/auth/constants/bcrypt.constants';
 import * as bcrypt from 'bcrypt';
 
@@ -12,6 +12,11 @@ async function main() {
       data: ProfilesInfo,
       skipDuplicates: true,
     });
+    await prisma.questionLevel.createMany({
+      data: QuestionLevelInfo,
+      skipDuplicates: true,
+    });
+
 
     const adminProfile = await prisma.profile.findFirst({
         where:{

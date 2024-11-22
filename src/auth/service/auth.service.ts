@@ -29,12 +29,19 @@ export class AuthService {
     const accessToken = this.generateToken(user);
     return { accessToken };
   }
-  private generateToken = ({ id, name, email, permissions }: UserDomain) => {
+  private generateToken = ({
+    id,
+    name,
+    email,
+    permissions,
+    profile,
+  }: UserDomain) => {
     return this.jwtService.sign({
       id,
       name,
       email,
       permissions,
+      profile,
     });
   };
 

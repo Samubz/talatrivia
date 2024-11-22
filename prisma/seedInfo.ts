@@ -1,4 +1,4 @@
-import { ProfileType, Profile, Permissions, User } from '@prisma/client';
+import { ProfileType, Profile, Permissions, User, QuestionLevel, Difficulty } from '@prisma/client';
 
 export const ProfilesInfo: Omit<Profile, 'id'>[] = [
   {
@@ -36,6 +36,32 @@ export const ProfilesInfo: Omit<Profile, 'id'>[] = [
       Permissions.LIST_QUESTIONS,
       Permissions.ANSWER_TRIVIA,
     ],
+  },
+];
+
+
+
+export const QuestionLevelInfo: Omit<QuestionLevel, 'id'>[] = [
+  {
+    difficulty: Difficulty.HARD,
+    score: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
+  {
+    difficulty: Difficulty.MEDIUM,
+    score: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
+  {
+    difficulty: Difficulty.EASY,
+    score: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
   },
 ];
 export const AdminUserInfo: Omit<User, 'id' | 'profileId'> = {

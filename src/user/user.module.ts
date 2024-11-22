@@ -12,7 +12,6 @@ import { ProfileRepository } from './repository/profile.repository';
   controllers: [UserController],
   providers: [
     PrismaService,
-    UserRepository,
     {
       provide: USER_REPOSITORY_TOKEN,
       useClass: UserRepository,

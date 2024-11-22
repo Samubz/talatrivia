@@ -50,6 +50,7 @@ export class UserController {
       email: domainElement.email,
       isActive: domainElement.isActive,
       profileId: domainElement.profileId,
+      profile:domainElement.profile,
       createdAt: domainElement.createdAt,
       updatedAt: domainElement.updatedAt,
       deletedAt: domainElement.deletedAt,
