@@ -2,18 +2,14 @@ import { PrismaService } from '@src/prisma/prisma.service';
 import { IQuestionRepository } from './question.repository.interface';
 import { QuestionDomain } from '../domain/question.domain';
 import { CreateQuestionDto } from '../dto/create-question.dto';
-import {
-  IQuestionLevelRepository,
-  QUESTION_LEVEL_REPOSITORY_TOKEN,
-} from './question-level.repository.interface';
-import { Inject, Injectable } from '@nestjs/common';
-import { ResponseErrorMessage } from '../constants/response-message.constants';
+
+import { Injectable } from '@nestjs/common';
 import {
   GetQuestionByIdResponse,
   IListQuestionsParams,
 } from './question.repository.type';
 import { QuestionLevelDomain } from '../domain/question-level.domain';
-import { Prisma, Question } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { CONDITIONAL_EXIST } from '@core/constants/where-prisma.constants';
 import { createInsensitiveSearch } from '@core/utils/create-insensitive-search.util';
 import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
@@ -21,19 +17,12 @@ import { ListQuestionsDTO } from '../dto/list-questions.dto';
 import { getPrevNextPagination } from '@core/utils/pagination-prev-next-response.util';
 @Injectable()
 export class QuestionRepository implements IQuestionRepository {
-  constructor(
-    private readonly prisma: PrismaService,
-
-    @Inject(QUESTION_LEVEL_REPOSITORY_TOKEN)
-    private readonly questionLevelRepository: IQuestionLevelRepository,
-  ) {}
-  async create(data: CreateQuestionDto): Promise<QuestionDomain | null> {
+  constructor(private readonly prisma: PrismaService) {}
+  async create(
+    data: CreateQuestionDto,
+    questionLevel: QuestionLevelDomain,
+  ): Promise<QuestionDomain | null> {
     const { level, options, ...rest } = data;
-    const questionLevel =
-      await this.questionLevelRepository.getByDifficulty(level);
-    if (!questionLevel) {
-      throw new Error(ResponseErrorMessage.QUESTION_LEVEL_NOT_FOUND);
-    }
     const createdQuestion = await this.prisma.question.create({
       data: {
         ...rest,
@@ -92,6 +81,17 @@ export class QuestionRepository implements IQuestionRepository {
       nextPage,
       prevPage,
     };
+  }
+
+  async validateQuestionIds(questionIds: string[]): Promise<boolean> {
+    const usersCount = await this.prisma.question.count({
+      where: {
+        id: { in: questionIds },
+        ...CONDITIONAL_EXIST
+      },
+    });
+
+    return questionIds.length === usersCount;
   }
 
   getWhereAndPaginationListQuestions(params: IListQuestionsParams) {

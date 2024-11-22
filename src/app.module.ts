@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { PermissionGuard } from '@core/guards/permission.guard';
 import { QuestionModule } from './question/question.module';
+import { TriviaModule } from './trivia/trivia.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { QuestionModule } from './question/question.module';
     AuthModule,
     UserModule,
     QuestionModule,
+    TriviaModule,
   ],
   controllers: [AppController],
   providers: [

@@ -25,6 +25,6 @@ import { QUESTION_REPOSITORY_TOKEN } from './repository/question.repository.inte
     },
   ],
   controllers: [QuestionController],
-  exports: [QUESTION_SERVICE_TOKEN],
+  exports: [QUESTION_REPOSITORY_TOKEN, QUESTION_SERVICE_TOKEN],
 })
 export class QuestionModule {}

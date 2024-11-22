@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IUserRepository } from './user.repository.interface';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { UserDomain } from '../domain/user.domain';
@@ -7,26 +7,17 @@ import {
   IListUsersParams,
 } from './user.repository.type';
 import { CreateUserDto } from '../dto/create-user.dto';
-import {
-  IProfileRepository,
-  PROFILE_REPOSITORY_TOKEN,
-} from './profile.repository.interface';
-import { ResponseErrorMessage } from '../constants/response-message.constants';
 import { Prisma, User } from '@prisma/client';
 import { ListUsersDTO } from '../dto/list-users.dto';
 import { CONDITIONAL_EXIST } from '@core/constants/where-prisma.constants';
 import { getPrevNextPagination } from '@core/utils/pagination-prev-next-response.util';
 import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
 import { createInsensitiveSearch } from '@core/utils/create-insensitive-search.util';
+import { ProfileDomain } from '../domain/profile.domain';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
-  constructor(
-    private readonly prisma: PrismaService,
-
-    @Inject(PROFILE_REPOSITORY_TOKEN)
-    private readonly profileRepository: IProfileRepository,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async findByEmail(email: string): Promise<UserDomain | null> {
     const user = await this.prisma.user.findFirst({
@@ -41,12 +32,12 @@ export class UserRepository implements IUserRepository {
     return this.toDomain(user);
   }
 
-  async create(data: CreateUserDto): Promise<UserDomain | null> {
-    const { email, name, password, isActive, profileType } = data;
-    const profile = await this.profileRepository.getByType(profileType);
-    if (!profile) {
-      throw new Error(ResponseErrorMessage.PROFILE_NOT_FOUND);
-    }
+  async create(
+    data: CreateUserDto,
+    profile: ProfileDomain,
+  ): Promise<UserDomain | null> {
+    const { email, name, password, isActive } = data;
+
     const createdUser = await this.prisma.user.create({
       data: {
         email,
@@ -96,6 +87,17 @@ export class UserRepository implements IUserRepository {
       nextPage,
       prevPage,
     };
+  }
+
+  async validateUserIds(userIds: string[]): Promise<boolean> {
+    const usersCount = await this.prisma.user.count({
+      where: {
+        id: { in: userIds },
+        ...CONDITIONAL_EXIST
+      },
+    });
+
+    return userIds.length === usersCount;
   }
 
   getWhereAndPaginationListUsers(params: IListUsersParams) {

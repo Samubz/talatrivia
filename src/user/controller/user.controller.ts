@@ -10,6 +10,9 @@ import { UserControllerType } from './user.controller.type';
 import { UserDomain } from '../domain/user.domain';
 import { ListUsersDTO } from '../dto/list-users.dto';
 import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
+import { validateErrors } from '@core/utils/http-error-response.util';
+import { ResponseErrorMessage } from '../constants/response-message.constants';
+import { PromiseResponse } from '@core/types/promise';
 
 @Controller('users')
 export class UserController {
@@ -21,23 +24,33 @@ export class UserController {
   @Post()
   async create(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<UserControllerType | null> {
-    const user = await this.userService.create(createUserDto);
-    return this.toController(user);
+  ): PromiseResponse<UserControllerType | null> {
+    try {
+      const user = await this.userService.create(createUserDto);
+      return this.toController(user);
+    } catch (error) {
+      validateErrors(error, UserController.name, ResponseErrorMessage);
+    }
   }
 
   @Permissions(PermissionsMap.LIST_USERS)
   @Get()
-  async get(@Query() listUsersDto: ListUsersDTO): Promise<PaginationResponse> {
-    const paginationResponse = await this.userService.list(listUsersDto);
-    const { users: userResponse, ...rest } = paginationResponse;
-    const users = (userResponse as UserDomain[]).map((user) =>
-      this.toController(user),
-    ) as UserControllerType[];
-    return {
-      users,
-      ...rest,
-    };
+  async get(
+    @Query() listUsersDto: ListUsersDTO,
+  ): PromiseResponse<PaginationResponse> {
+    try {
+      const paginationResponse = await this.userService.list(listUsersDto);
+      const { users: userResponse, ...rest } = paginationResponse;
+      const users = (userResponse as UserDomain[]).map((user) =>
+        this.toController(user),
+      ) as UserControllerType[];
+      return {
+        users,
+        ...rest,
+      };
+    } catch (error) {
+      validateErrors(error, UserController.name, ResponseErrorMessage);
+    }
   }
 
   private toController(
@@ -50,7 +63,7 @@ export class UserController {
       email: domainElement.email,
       isActive: domainElement.isActive,
       profileId: domainElement.profileId,
-      profile:domainElement.profile,
+      profile: domainElement.profile,
       createdAt: domainElement.createdAt,
       updatedAt: domainElement.updatedAt,
       deletedAt: domainElement.deletedAt,

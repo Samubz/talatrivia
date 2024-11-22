@@ -25,6 +25,6 @@ import { ProfileRepository } from './repository/profile.repository';
       useClass: ProfileRepository,
     },
   ],
-  exports: [USER_SERVICE_TOKEN],
+  exports: [USER_REPOSITORY_TOKEN, USER_SERVICE_TOKEN],
 })
 export class UserModule {}

@@ -26,6 +26,9 @@ import { ProfileTypeDomain } from '@src/user/domain/role.domain';
 import { profileIsAdmin } from '@core/utils/is-admin.util';
 import { ISession } from '@src/auth/domain/token-payload.domain';
 import { ExpressRequest } from '@core/types/express-session';
+import { validateErrors } from '@core/utils/http-error-response.util';
+import { ResponseErrorMessage } from '../constants/response-message.constants';
+import { PromiseResponse } from '@core/types/promise';
 
 @Controller('questions')
 export class QuestionController {
@@ -39,11 +42,15 @@ export class QuestionController {
   async create(
     @Body() createQuestionDto: CreateQuestionDto,
     @Request() request: ExpressRequest,
-  ): Promise<QuestionControllerType | null> {
-    const session: ISession = request?.session;
-    const { profile } = session;
-    const user = await this.questionService.create(createQuestionDto);
-    return this.toController(user, profile);
+  ): PromiseResponse<QuestionControllerType | null> {
+    try {
+      const session: ISession = request?.session;
+      const { profile } = session;
+      const user = await this.questionService.create(createQuestionDto);
+      return QuestionController.toController(user, profile);
+    } catch (error) {
+      validateErrors(error, QuestionController.name, ResponseErrorMessage);
+    }
   }
 
   @Permissions(PermissionsMap.LIST_QUESTIONS)
@@ -58,14 +65,14 @@ export class QuestionController {
       await this.questionService.list(listQuestionsDto);
     const { questions: questionsResponse, ...rest } = paginationResponse;
     const questions = (questionsResponse as QuestionDomain[]).map((question) =>
-      this.toController(question, profile),
+      QuestionController.toController(question, profile),
     ) as QuestionControllerType[];
     return {
       questions,
       ...rest,
     };
   }
-  private questionToController(
+  private static optionToController(
     option: OptionDomain,
     profile: ProfileTypeDomain,
   ): OptionDomain | OptionControllerType {
@@ -75,7 +82,7 @@ export class QuestionController {
       ...(profileIsAdmin(profile) && { valid: option.valid }),
     };
   }
-  private toController(
+  static toController(
     domainElement: QuestionDomain | null,
     profile: ProfileTypeDomain,
   ): QuestionControllerType | null {
@@ -85,7 +92,7 @@ export class QuestionController {
       title: domainElement.title,
       level: domainElement.level,
       options: domainElement.options.map((option) =>
-        this.questionToController(option, profile),
+        this.optionToController(option, profile),
       ),
     };
   }
