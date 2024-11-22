@@ -1,0 +1,1470 @@
+{
+	"info": {
+		"_postman_id": "f8461986-903e-4ad9-8fb0-c9c09b17bb13",
+		"name": "TalaTrivia",
+		"description": "# 🚀 **Resumen de la Colección**\n\nEsta colección contiene los endpoints necesarios para interactuar con el sistema **TalaTrivia**, incluyendo la gestión de usuarios, autenticación, creación de preguntas, administración de trivias y manejo de respuestas.\n\n  \n\n### **Requisitos Previos**\n\n1. **Autenticación Obligatoria**:  \n    Es **imprescindible** ejecutar primero el endpoint `Auth > Login` para obtener el `accessToken`. Este token es requerido para autorizar todas las solicitudes posteriores. Una vez obtenido, el token se almacena como una variable de entorno (`{{accessToken}}`), y será automáticamente incluido en los encabezados de autorización de los demás endpoints.\n    \n2. **Definición de la URL Base**:  \n    Es necesario configurar la variable `{{url}}` con la URL base del sistema, ya que esta se utiliza en todos los endpoints de la colección. Asegúrate de que la variable esté correctamente configurada para garantizar el funcionamiento de las solicitudes.\n    \n\n### **Estructura de la Colección**\n\n- **Users**: Endpoints para la gestión de usuarios, incluyendo creación y listado.\n    \n- **Auth**: Endpoint de inicio de sesión para obtener el token de acceso.\n    \n- **Questions**: Gestión de preguntas, incluyendo creación y listado.\n    \n- **Trivia**: Administración de trivias, como creación, listado, trivias del usuario y consulta de rankings.\n    \n- **Answers**: Envío y validación de respuestas a preguntas en trivias.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13305902",
+		"_collection_link": "https://tactechspa.postman.co/workspace/My-Workspace~cdf363d1-e6cf-41ae-8da3-cf75a80f5d23/collection/13305902-f8461986-903e-4ad9-8fb0-c9c09b17bb13?action=share&source=collection_link&creator=13305902"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"player1@email.com\",\n  \"name\": \"player1\",\n  \"password\": \"Password-player1\", \n  \"confirmPassword\": \"Password-player1\",\n  \"isActive\": true,\n  \"profileType\": \"PLAYER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "481"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e1-Nr0Q1X/x90nJwmJ3SyvoLSjYMtU\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Nov 2024 23:43:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": [\n        {\n            \"property\": \"email\",\n            \"message\": \"email must be an email\"\n        },\n        {\n            \"property\": \"name\",\n            \"message\": \"name must be shorter than or equal to 100 characters\"\n        },\n        {\n            \"property\": \"password\",\n            \"message\": \"PASSWORD_NOT_VALID\"\n        },\n        {\n            \"property\": \"confirmPassword\",\n            \"message\": \"PASSWORD_NOT_VALID\"\n        },\n        {\n            \"property\": \"isActive\",\n            \"message\": \"isActive must be a boolean value\"\n        },\n        {\n            \"property\": \"profileType\",\n            \"message\": \"profileType must be one of the following values: ADMIN, PLAYER\"\n        }\n    ],\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+						},
+						{
+							"name": "PASSWORDS_NOT_MATCH",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"player1@email.com\",\n  \"name\": \"player1\",\n  \"password\": \"Password-player1\", \n  \"confirmPassword\": \"password-player1\",\n  \"isActive\": true,\n  \"profileType\": \"PLAYER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "115"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"73-VGsnthon5o6Nbo540FqTav+FafI\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Nov 2024 23:45:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": [\n        {\n            \"property\": \"confirmPassword\",\n            \"message\": \"PASSWORDS_NOT_MATCH\"\n        }\n    ],\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+						},
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"player1@email.com\",\n  \"name\": \"player1\",\n  \"password\": \"Password-player1\", \n  \"confirmPassword\": \"Password-player1\",\n  \"isActive\": true,\n  \"profileType\": \"PLAYER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "269"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10d-73ITbG2gSeviWK4llVqtRBzsCOI\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Nov 2024 23:54:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"fcb322b0-7813-443d-93b6-8c55a4434736\",\n    \"name\": \"player1\",\n    \"email\": \"player1@email.com\",\n    \"isActive\": true,\n    \"profileId\": \"54666398-787d-41c5-ab4b-a1413bed4973\",\n    \"createdAt\": \"2024-11-20T23:54:45.532Z\",\n    \"updatedAt\": \"2024-11-20T23:54:45.532Z\",\n    \"deletedAt\": null,\n    \"permissions\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "ListUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users?name=admin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Forbidden resource (No permissions)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"45-MZJWZc+Y+RUbHpnhz2B2Vipii24\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 21 Nov 2024 00:04:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Forbidden resource\",\n    \"error\": \"Forbidden\",\n    \"statusCode\": 403\n}"
+						},
+						{
+							"name": "success with filters and pagination",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/users?name=admin",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "admin"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "315"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"13b-b+Fj3jKALSxLQQIZsJsgi1/sXUU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 21 Nov 2024 00:59:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"users\": [\n        {\n            \"id\": \"f72fd2a7-f627-434f-9455-62367f543b6c\",\n            \"name\": \"Admin User\",\n            \"email\": \"admin@email.com\",\n            \"isActive\": true,\n            \"profileId\": \"eb4f9103-d4bd-4ccc-bb7d-c4707d1d7974\",\n            \"createdAt\": \"2024-11-21T00:17:17.465Z\",\n            \"updatedAt\": \"2024-11-21T00:17:17.465Z\",\n            \"deletedAt\": null\n        }\n    ],\n    \"totalElements\": 1,\n    \"nextPage\": null,\n    \"prevPage\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "Esta carpeta contiene los endpoints relacionados con la gestión de usuarios en el sistema. Incluye operaciones para:\n\n- Crear un nuevo usuario, especificando detalles como email, nombre, contraseña y tipo de perfil.\n    \n- Listar los usuarios existentes, con soporte para filtros y paginación.  \n    Estos endpoints requieren un token de autenticación y permisos específicos para su uso."
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (responseCode.code === 200) {",
+									"    const responseBody = pm.response.json();",
+									"    console.log(responseBody)",
+									"    pm.environment.set('accessToken', responseBody.accessToken);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@email.com\",\n    \"password\":\"Password-Admin1\"\n}\n\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"admin@email.com\",\n    \"password\":\"Password-Admin1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "578"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"242-rsXOFxoWwTq4I1VjCKfN+CWSDR4\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Nov 2024 23:41:37 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyNjdlMzVmLTgyMDgtNDZmNC05YzU5LWUwOWYxOTIzYjM3OSIsIm5hbWUiOiJBZG1pbiBVc2VyIiwiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJwZXJtaXNzaW9ucyI6WyJHRVRfVFJJVklBIiwiTElTVF9UUklWSUEiLCJDUkVBVEVfVFJJVklBIiwiREVMRVRFX1RSSVZJQSIsIkdFVF9RVUVTVElPTiIsIkxJU1RfUVVFU1RJT05TIiwiQ1JFQVRFX1FVRVNUSU9OIiwiREVMRVRFX1FVRVNUSU9OIiwiQVNTSUdOX1VTRVJfVFJJVklBIiwiQ1JFQVRFX1VTRVIiLCJHRVRfVFJJVklBX1JBTktJTkciLCJHRVRfVFJJVklBX1NDT1JFIiwiQU5TV0VSX1RSSVZJQSJdLCJpYXQiOjE3MzIxNDYwOTcsImV4cCI6MTczMjE4MjA5N30.KN3U7gqGsxi_ZzPrl60HR2UW6t0B-l5zvv-AFtA7JEw\"\n}"
+						}
+					]
+				}
+			],
+			"description": "En esta carpeta se encuentran los endpoints relacionados con la autenticación del sistema. Contiene:\n\n- Login: Permite a los usuarios autenticarse proporcionando email y contraseña válidos, devolviendo un token de acceso para usar en otros servicios.  \n    Este token debe ser incluido en las solicitudes protegidas como `Bearer Token`."
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Create Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"pregunta 1\",\n    \"level\": \"MEDIUM\",\n    \"options\": [\n        {\n            \"title\": \"Respuesta 1\",\n            \"valid\": true\n        },\n        {\n            \"title\": \"Respuesta 2\",\n            \"valid\": false\n        },\n        {\n            \"title\": \"Respuesta 3\",\n            \"valid\": false\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/questions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Question with no correct answer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"pregunta 1\",\n    \"level\": \"MEDIUM\",\n    \"options\": [\n        {\n            \"title\": \"Respuesta 1\",\n            \"valid\": false\n        },\n        {\n            \"title\": \"Respuesta 2\",\n            \"valid\": false\n        },\n        {\n            \"title\": \"Respuesta 3\",\n            \"valid\": false\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/questions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"questions"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "135"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"87-im1A+FI2WeEkmcJ/xT1ovsov1b4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 21 Nov 2024 02:12:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": [\n        {\n            \"property\": \"options\",\n            \"message\": \"Only one option can have \\\"valid\\\" set to true.\"\n        }\n    ],\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+						},
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"pregunta 1\",\n    \"level\": \"MEDIUM\",\n    \"options\": [\n        {\n            \"title\": \"Respuesta 1\",\n            \"valid\": true\n        },\n        {\n            \"title\": \"Respuesta 2\",\n            \"valid\": false\n        },\n        {\n            \"title\": \"Respuesta 3\",\n            \"valid\": false\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/questions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"questions"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "299"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"12b-Rk1krlYyy7y1E+Pg7ncuGJBWfVg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 21 Nov 2024 02:13:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"3f86bc87-7875-47b8-a131-ac6e0710b65b\",\n    \"title\": \"pregunta 1\",\n    \"level\": \"MEDIUM\",\n    \"options\": [\n        {\n            \"id\": \"3d670915-c5b9-4133-947c-28b0cd4840f1\",\n            \"title\": \"Respuesta 1\"\n        },\n        {\n            \"id\": \"87be7777-35d7-43c3-bed0-bbe3915329cd\",\n            \"title\": \"Respuesta 2\"\n        },\n        {\n            \"id\": \"75cb9e98-aa29-4046-a1d2-b7430523751b\",\n            \"title\": \"Respuesta 3\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "List Questions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/questions?title=pregunta",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"questions"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "pregunta"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/questions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"questions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1865"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"749-Vsaz0VkR2BeMIZ6Mzu1WqQS4B78\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 11:58:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"questions\": [\n        {\n            \"id\": \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"a657ad72-963b-44cf-8346-c8c9b277e072\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"599ffe7f-ddcb-4636-8ce9-d710aa7528e1\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"1ca2e6ff-35b4-4a88-91fa-b391998a4916\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        },\n        {\n            \"id\": \"8042e839-6115-41f7-aaf4-932b2bd07da3\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"4ab8a653-3176-4b2f-82f5-9339644cff45\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"b63b7351-1142-4e37-b208-a08c519d086a\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"8cd4d9cb-b5e4-48da-ac09-720cdb41aa06\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        },\n        {\n            \"id\": \"07522cb2-4e11-48ee-8a9b-de694eb78ac3\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"52439774-df39-43a3-b0d0-0ef53e2a2495\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"27fbb263-15cb-4d7a-b9b1-30b655a1f968\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"8a795d7e-127e-436e-b6e7-053fd329f8ba\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        },\n        {\n            \"id\": \"a6637720-e7e7-4adb-be80-dfd6b5f3eb92\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"811ea9d7-9f16-41f6-8086-cd9f3dc411b8\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"647a9759-e899-4ec9-a345-c3e092643dae\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"095d7224-c13d-40b9-be5b-3643c3417f82\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        },\n        {\n            \"id\": \"f5b20c56-3744-4427-b028-462df70de810\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"dcedec2d-9334-424a-8fbc-b5a4ba6763b3\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"d17c736e-b86f-4e68-9b61-7182c392508b\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"9aa767ac-1eb1-46b6-8d20-99f959fdb881\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        },\n        {\n            \"id\": \"3f86bc87-7875-47b8-a131-ac6e0710b65b\",\n            \"title\": \"pregunta 1\",\n            \"level\": \"MEDIUM\",\n            \"options\": [\n                {\n                    \"id\": \"3d670915-c5b9-4133-947c-28b0cd4840f1\",\n                    \"title\": \"Respuesta 1\"\n                },\n                {\n                    \"id\": \"87be7777-35d7-43c3-bed0-bbe3915329cd\",\n                    \"title\": \"Respuesta 2\"\n                },\n                {\n                    \"id\": \"75cb9e98-aa29-4046-a1d2-b7430523751b\",\n                    \"title\": \"Respuesta 3\"\n                }\n            ]\n        }\n    ],\n    \"totalElements\": 6,\n    \"nextPage\": null,\n    \"prevPage\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "Incluye los endpoints necesarios para administrar las preguntas del sistema. Las funcionalidades clave incluyen:\n\n- Crear una nueva pregunta, especificando el nivel de dificultad y las opciones de respuesta.\n    \n- Listar preguntas disponibles con soporte para filtros como el título.  \n    Se requiere autenticación y permisos específicos para realizar estas acciones."
+		},
+		{
+			"name": "Trivia",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Trivia 5\",\n    \"description\": \"Descripcion para trivia 1\",\n    \"questions\": [\n        \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n        \"07522cb2-4e11-48ee-8a9b-de694eb78ac3\"\n    ],\n    \"users\": [\n        \"7d6c1391-c8eb-4334-9637-0c3bc7bfb469\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/trivia",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"trivia"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "invalid questions parameter",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Trivia 1\",\n    \"description\": \"Descripcion para trivia 1\",\n    \"questions\": [\n        \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n        \"f7d6e023-03d2-4450-bd69-f08db5b638dc\"\n    ],\n    \"users\": [\n        \"7d6c1391-c8eb-4334-9637-0c3bc7bfb469\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/trivia",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"trivia"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"34-JUDxpAXpNgIE9vKskNl3lPfPDQI\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 15:02:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 422,\n    \"message\": \"INVALID_QUESTIONS_IDS\"\n}"
+						},
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Trivia 1\",\n    \"description\": \"Descripcion para trivia 1\",\n    \"questions\": [\n        \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n        \"07522cb2-4e11-48ee-8a9b-de694eb78ac3\"\n    ],\n    \"users\": [\n        \"7d6c1391-c8eb-4334-9637-0c3bc7bfb469\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/trivia",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"trivia"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1085"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"43d-3CltYnb8qvFmYtchA1CT+IXQqRA\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 15:03:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f343aadf-f893-42e7-a62d-6157441a473c\",\n    \"name\": \"Trivia 1\",\n    \"questions\": [\n        {\n            \"id\": \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n            \"title\": \"pregunta 1\",\n            \"level\": {\n                \"id\": \"09e2f55d-aae4-42c9-92ad-62240968a9e5\",\n                \"difficulty\": \"MEDIUM\",\n                \"score\": 3,\n                \"createdAt\": \"2024-11-21T02:05:58.222Z\",\n                \"updatedAt\": \"2024-11-21T02:05:58.222Z\",\n                \"deletedAt\": null\n            },\n            \"options\": [\n                {\n                    \"id\": \"a657ad72-963b-44cf-8346-c8c9b277e072\",\n                    \"title\": \"Respuesta 1\",\n                    \"valid\": true\n                },\n                {\n                    \"id\": \"599ffe7f-ddcb-4636-8ce9-d710aa7528e1\",\n                    \"title\": \"Respuesta 2\",\n                    \"valid\": true\n                },\n                {\n                    \"id\": \"1ca2e6ff-35b4-4a88-91fa-b391998a4916\",\n                    \"title\": \"Respuesta 3\",\n                    \"valid\": true\n                }\n            ]\n        },\n        {\n            \"id\": \"07522cb2-4e11-48ee-8a9b-de694eb78ac3\",\n            \"title\": \"pregunta 1\",\n            \"level\": {\n                \"id\": \"09e2f55d-aae4-42c9-92ad-62240968a9e5\",\n                \"difficulty\": \"MEDIUM\",\n                \"score\": 3,\n                \"createdAt\": \"2024-11-21T02:05:58.222Z\",\n                \"updatedAt\": \"2024-11-21T02:05:58.222Z\",\n                \"deletedAt\": null\n            },\n            \"options\": [\n                {\n                    \"id\": \"52439774-df39-43a3-b0d0-0ef53e2a2495\",\n                    \"title\": \"Respuesta 1\",\n                    \"valid\": true\n                },\n                {\n                    \"id\": \"27fbb263-15cb-4d7a-b9b1-30b655a1f968\",\n                    \"title\": \"Respuesta 2\",\n                    \"valid\": false\n                },\n                {\n                    \"id\": \"8a795d7e-127e-436e-b6e7-053fd329f8ba\",\n                    \"title\": \"Respuesta 3\",\n                    \"valid\": false\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/trivia?name=Trivia",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"trivia"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Trivia"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/trivia?name=Trivia 2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"trivia"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Trivia 2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "642"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"282-HijbgbK3zryBfrXDetsKQBKLcsk\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 15:14:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"users\": [\n        {\n            \"id\": \"fc7bca55-633d-453b-8bd9-14a125b4b5b9\",\n            \"name\": \"Trivia 2\",\n            \"questions\": [\n                {\n                    \"id\": \"f7d6e023-03d2-4450-bd69-f08db5b638dc\",\n                    \"title\": \"pregunta 1\",\n                    \"level\": {\n                        \"id\": \"09e2f55d-aae4-42c9-92ad-62240968a9e5\",\n                        \"difficulty\": \"MEDIUM\",\n                        \"score\": 3,\n                        \"createdAt\": \"2024-11-21T02:05:58.222Z\",\n                        \"updatedAt\": \"2024-11-21T02:05:58.222Z\",\n                        \"deletedAt\": null\n                    },\n                    \"options\": [\n                        {\n                            \"id\": \"a657ad72-963b-44cf-8346-c8c9b277e072\",\n                            \"title\": \"Respuesta 1\",\n                            \"valid\": true\n                        },\n                        {\n                            \"id\": \"599ffe7f-ddcb-4636-8ce9-d710aa7528e1\",\n                            \"title\": \"Respuesta 2\",\n                            \"valid\": true\n                        },\n                        {\n                            \"id\": \"1ca2e6ff-35b4-4a88-91fa-b391998a4916\",\n                            \"title\": \"Respuesta 3\",\n                            \"valid\": true\n                        }\n                    ]\n                }\n            ]\n        }\n    ],\n    \"totalElements\": 1,\n    \"nextPage\": null,\n    \"prevPage\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "List by User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/trivia/user?name=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"trivia",
+								"user"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/trivia/user?name=Trivia 5",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"trivia",
+										"user"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Trivia 5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1067"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"42b-sq8AjUf+bW9qWl2shGjzVBznsv8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 15:56:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"users\": [\n        {\n            \"id\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n            \"name\": \"Trivia 5\",\n            \"questions\": [\n                {\n                    \"id\": \"c5b79965-4b8b-4ce1-8c98-9cfbaae5cc62\",\n                    \"title\": \"pregunta 1\",\n                    \"level\": {\n                        \"id\": \"569e5e22-48f5-45cb-b86d-d42fdb3706e8\",\n                        \"difficulty\": \"MEDIUM\",\n                        \"score\": 3,\n                        \"createdAt\": \"2024-11-22T15:47:44.107Z\",\n                        \"updatedAt\": \"2024-11-22T15:47:44.107Z\",\n                        \"deletedAt\": null\n                    },\n                    \"options\": [\n                        {\n                            \"id\": \"c17126a3-ff3f-4abb-9a60-a122b29b9000\",\n                            \"title\": \"Respuesta 1\"\n                        },\n                        {\n                            \"id\": \"f6095fbe-f5cf-4f31-be82-cbd9dd4b2984\",\n                            \"title\": \"Respuesta 2\"\n                        },\n                        {\n                            \"id\": \"bf61f11f-0b91-4175-a690-765afe8176a8\",\n                            \"title\": \"Respuesta 3\"\n                        }\n                    ]\n                },\n                {\n                    \"id\": \"b2828557-b87e-4535-8002-d3bdeef068c1\",\n                    \"title\": \"pregunta 3\",\n                    \"level\": {\n                        \"id\": \"569e5e22-48f5-45cb-b86d-d42fdb3706e8\",\n                        \"difficulty\": \"MEDIUM\",\n                        \"score\": 3,\n                        \"createdAt\": \"2024-11-22T15:47:44.107Z\",\n                        \"updatedAt\": \"2024-11-22T15:47:44.107Z\",\n                        \"deletedAt\": null\n                    },\n                    \"options\": [\n                        {\n                            \"id\": \"20df17fc-25ca-4fa9-89d7-942108e9e0ca\",\n                            \"title\": \"Respuesta 1\"\n                        },\n                        {\n                            \"id\": \"6b98493c-f9ba-4358-b485-327a77108157\",\n                            \"title\": \"Respuesta 2\"\n                        },\n                        {\n                            \"id\": \"7b3e9bc9-aa5e-4b0c-ad64-960d01fb806d\",\n                            \"title\": \"Respuesta 3\"\n                        }\n                    ]\n                }\n            ]\n        }\n    ],\n    \"totalElements\": 1,\n    \"nextPage\": null,\n    \"prevPage\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get ranking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/trivia/5460073a-444c-42b7-bf4c-81a374766615/ranking",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"trivia",
+								"5460073a-444c-42b7-bf4c-81a374766615",
+								"ranking"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/trivia/5460073a-444c-42b7-bf4c-81a374766615/ranking",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"trivia",
+										"5460073a-444c-42b7-bf4c-81a374766615",
+										"ranking"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "250"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"fa-fMOiCDEOMheJ1ATVia8WjSStgZw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 19:41:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"userId\": \"24685ff1-041e-4f4f-97b2-7434e15affe1\",\n        \"totalScore\": 6,\n        \"name\": \"player2\"\n    },\n    {\n        \"userId\": \"fc34b13d-3a77-4537-985f-45d15c84f09a\",\n        \"totalScore\": 6,\n        \"name\": \"Admin User\"\n    },\n    {\n        \"userId\": \"4f2fa09b-d2a6-47e6-82ed-38f77305c3e7\",\n        \"totalScore\": 3,\n        \"name\": \"player1\"\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "Esta carpeta agrupa los endpoints relacionados con la gestión de trivias. Incluye:\n\n- Crear trivias, asociando preguntas y usuarios específicos.\n    \n- Listar trivias, con opciones para filtrar por nombre.\n    \n- Obtener trivias asociadas al usuario activo.\n    \n- Consultar el ranking de usuarios para una trivia específica, mostrando puntajes y posiciones.  \n    Estos endpoints requieren autenticación y permisos específicos para cada operación.\n    \n\nEs importante destacar que para utilizar estos endpoints, debes contar con los permisos correspondientes que habiliten las acciones a realizar. Por ejemplo, para acceder al endpoint `list`, es necesario que el usuario tenga el rol de **ADMIN**, ya que este es el único rol que incluye el permiso **LIST_TRIVIA**, requerido para utilizar dicho endpoint.\n\nEn el caso del endpoint `list by user`, el sistema devolverá todas las trivias asociadas a la sesión activa del usuario."
+		},
+		{
+			"name": "Answers",
+			"item": [
+				{
+					"name": "Create answer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"triviaId\": \"5460073a-444c-42b7-bf4c-81a374766615\",\n    \"questionId\": \"8c086fc9-f874-4fa1-bb18-c8e5edf8d21a\",\n    \"optionId\": \"82b1f4a0-0422-434c-93cc-65df7a9648e4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/answers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"answers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Option not found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"questionId\": \"c5b79965-4b8b-4ce1-8c98-9cfbaae5cc62\",\n    \"optionId\": \"569e5e22-48f5-45cb-b86d-d42fdb3706e8\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/answers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"answers"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2f-vNNGwT67cjM/ICE1KfgEVThxwUM\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 18:18:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 422,\n    \"message\": \"OPTION_NOT_FOUND\"\n}"
+						},
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"questionId\": \"c5b79965-4b8b-4ce1-8c98-9cfbaae5cc62\",\n    \"optionId\": \"c17126a3-ff3f-4abb-9a60-a122b29b9000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/answers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"answers"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "220"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"dc-fne7KawWHYqpZ+K6I0/GpZxI1qo\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 18:23:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f2ea5629-9448-43ef-91b3-5f1935c8c857\",\n    \"questionId\": \"c5b79965-4b8b-4ce1-8c98-9cfbaae5cc62\",\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"optionId\": \"c17126a3-ff3f-4abb-9a60-a122b29b9000\",\n    \"valid\": true,\n    \"score\": 3\n}"
+						},
+						{
+							"name": "already answered",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"questionId\": \"c5b79965-4b8b-4ce1-8c98-9cfbaae5cc62\",\n    \"optionId\": \"c17126a3-ff3f-4abb-9a60-a122b29b9000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/answers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"answers"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "59"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3b-HIoTAcSx0yyCb2q1riMzfymh/+U\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 18:23:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 422,\n    \"message\": \"QUESTION_ALREADY_HAVE_ANSWER\"\n}"
+						},
+						{
+							"name": "Invalid answer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"questionId\": \"b2828557-b87e-4535-8002-d3bdeef068c1\",\n    \"optionId\": \"7b3e9bc9-aa5e-4b0c-ad64-960d01fb806d\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/answers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"answers"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"dd-OJG0PXo1KVY17/UiLI6nCPpifKI\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Nov 2024 18:26:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"dc61cf9c-f16d-4473-bc91-87c1293f3452\",\n    \"questionId\": \"b2828557-b87e-4535-8002-d3bdeef068c1\",\n    \"triviaId\": \"3f0d7a5a-5193-43a7-bee3-919af379b22b\",\n    \"optionId\": \"7b3e9bc9-aa5e-4b0c-ad64-960d01fb806d\",\n    \"valid\": false,\n    \"score\": 0\n}"
+						}
+					]
+				}
+			],
+			"description": "Aquí encontrarás los endpoints relacionados con el manejo de respuestas en las trivias. Las funcionalidades incluyen:\n\n- Crear una respuesta a una pregunta específica dentro de una trivia.  \n    El sistema valida automáticamente si la opción seleccionada es válida, si la pregunta ya tiene una respuesta asociada y actualiza el puntaje del usuario. Estos endpoints requieren autenticación y permisos adecuados."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

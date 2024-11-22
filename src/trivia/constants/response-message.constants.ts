@@ -1,0 +1,4 @@
+export enum ResponseErrorMessage {
+  INVALID_QUESTIONS_IDS = 'INVALID_QUESTIONS_IDS',
+  INVALID_USERS_IDS = 'INVALID_USERS_IDS',
+}
