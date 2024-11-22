@@ -124,14 +124,35 @@ export class TriviaRepository implements ITriviaRepository {
     };
   }
 
+  async hasQuestion(triviaId: string, questionId: string): Promise<boolean> {
+    const questionOnTrivia = await this.prisma.questionOnTrivia.findFirst({
+      where: {
+        triviaId,
+        questionId,
+        ...CONDITIONAL_EXIST,
+      },
+    });
+    return Boolean(questionOnTrivia);
+  }
+
+  async hasUserAssigned(triviaId: string, userId: string): Promise<boolean> {
+    const userOnTrivia = await this.prisma.usersOnTrivia.findFirst({
+      where: {
+        triviaId,
+        userId,
+        ...CONDITIONAL_EXIST,
+      },
+    });
+    return Boolean(userOnTrivia);
+  }
   getWhereAndPaginationListTrivia(params: IListTriviaParams) {
-    const { name = '', page, limit } = params;
+    const { name = '', userId = '', page, limit } = params;
 
     const skipElements = page && limit ? (page - 1) * limit : undefined;
-
     const whereInput: Prisma.TriviaWhereInput = {
       ...CONDITIONAL_EXIST,
       ...(name.length && createInsensitiveSearch('name', name)),
+      ...(userId && { users: { some: { userId } } }),
     };
     const pagination: Prisma.TriviaFindManyArgs = {
       take: limit,

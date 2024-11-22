@@ -67,6 +67,7 @@ model Trivia {
   description       String?
   questions         QuestionOnTrivia[]
   users             UsersOnTrivia[]
+  answers           Answer[]  
   createdAt         DateTime           @default(now())
   updatedAt         DateTime?            @default(now())
   deletedAt         DateTime?
@@ -103,6 +104,8 @@ model Answer {
   questionId        String
   option            Option              @relation(fields: [optionId],references: [id])
   optionId          String
+  trivia            Trivia              @relation(fields: [triviaId],references: [id])
+  triviaId          String
   valid             Boolean
   score             Int
   createdAt         DateTime           @default(now())
@@ -124,6 +127,7 @@ enum ProfileType {
 enum Permissions {
   GET_TRIVIA
   LIST_TRIVIA
+  LIST_TRIVIA_USER
   CREATE_TRIVIA
   DELETE_TRIVIA
   GET_QUESTION

@@ -1,7 +1,7 @@
 import { ProfileTypeDomain } from "@src/user/domain/role.domain";
 
 export interface JWTPayload {
-  sub: string;
+  id: string;
   name: string;
   email: string;
   permissions: string[];

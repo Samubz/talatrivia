@@ -11,6 +11,7 @@ import { AuthGuard } from '@core/guards/auth.guard';
 import { PermissionGuard } from '@core/guards/permission.guard';
 import { QuestionModule } from './question/question.module';
 import { TriviaModule } from './trivia/trivia.module';
+import { AnswerModule } from './answer/answer.module'; 
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TriviaModule } from './trivia/trivia.module';
     UserModule,
     QuestionModule,
     TriviaModule,
+    AnswerModule, 
   ],
   controllers: [AppController],
   providers: [

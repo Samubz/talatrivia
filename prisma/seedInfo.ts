@@ -22,6 +22,7 @@ export const ProfilesInfo: Omit<Profile, 'id'>[] = [
       Permissions.GET_TRIVIA_SCORE,
       Permissions.ANSWER_TRIVIA,
       Permissions.LIST_USERS,
+      Permissions.LIST_TRIVIA_USER,
     ],
   },
   {
@@ -35,6 +36,7 @@ export const ProfilesInfo: Omit<Profile, 'id'>[] = [
       Permissions.GET_QUESTION,
       Permissions.LIST_QUESTIONS,
       Permissions.ANSWER_TRIVIA,
+      Permissions.LIST_TRIVIA_USER,
     ],
   },
 ];

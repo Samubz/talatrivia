@@ -15,6 +15,7 @@ import { createInsensitiveSearch } from '@core/utils/create-insensitive-search.u
 import { PaginationResponse } from '@core/interfaces/pagination-response.interface';
 import { ListQuestionsDTO } from '../dto/list-questions.dto';
 import { getPrevNextPagination } from '@core/utils/pagination-prev-next-response.util';
+
 @Injectable()
 export class QuestionRepository implements IQuestionRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -87,11 +88,25 @@ export class QuestionRepository implements IQuestionRepository {
     const usersCount = await this.prisma.question.count({
       where: {
         id: { in: questionIds },
-        ...CONDITIONAL_EXIST
+        ...CONDITIONAL_EXIST,
       },
     });
 
     return questionIds.length === usersCount;
+  }
+
+  async get(id: string): Promise<QuestionDomain | null> {
+    const question = await this.prisma.question.findUnique({
+      where: {
+        id,
+        ...CONDITIONAL_EXIST,
+      },
+      include: {
+        options: true,
+        level: true,
+      },
+    });
+    return this.toDomain(question);
   }
 
   getWhereAndPaginationListQuestions(params: IListQuestionsParams) {
@@ -126,7 +141,7 @@ export class QuestionRepository implements IQuestionRepository {
     return {
       id: prismaElement.id,
       title: prismaElement.title,
-      level: prismaElement.level.difficulty as unknown as QuestionLevelDomain,
+      level: prismaElement.level ,
       options: prismaElement.options.map((option) => ({
         id: option.id,
         title: option.title,

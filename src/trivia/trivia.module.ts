@@ -22,6 +22,6 @@ import { QuestionModule } from '@src/question/question.module';
   ],
   imports: [UserModule, QuestionModule],
   controllers: [TriviaController],
-  exports: [TRIVIA_SERVICE_TOKEN],
+  exports: [TRIVIA_SERVICE_TOKEN,TRIVIA_REPOSITORY_TOKEN],
 })
 export class TriviaModule {}

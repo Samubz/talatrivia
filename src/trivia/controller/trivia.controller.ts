@@ -49,6 +49,31 @@ export class TriviaController {
       validateErrors(error, TriviaController.name, ResponseErrorMessage);
     }
   }
+  @Permissions(PermissionsMap.LIST_TRIVIA_USER)
+  @Get('/user')
+  async getByUser(
+    @Query() listTriviaDto: ListTriviaDTO,
+    @Request() request: ExpressRequest,
+  ): PromiseResponse<PaginationResponse> {
+    try {
+      const session: ISession = request?.session;
+      const { profile, id } = session;
+      const paginationResponse = await this.triviaService.list({
+        ...listTriviaDto,
+        userId: id,
+      });
+      const { trivia: triviaResponse, ...rest } = paginationResponse;
+      const users = (triviaResponse as TriviaDomain[]).map((trivia) =>
+        this.toController(trivia, profile),
+      ) as TriviaControllerType[];
+      return {
+        users,
+        ...rest,
+      };
+    } catch (error) {
+      validateErrors(error, TriviaController.name, ResponseErrorMessage);
+    }
+  }
 
   @Permissions(PermissionsMap.LIST_TRIVIA)
   @Get()

@@ -31,6 +31,7 @@ export type GetTriviaByIdResponse = Trivia &
 
 export interface IListTriviaParams {
   name?: string;
+  userId?: string;
   page?: number;
   limit?: number;
 }
