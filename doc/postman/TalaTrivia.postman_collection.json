@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "f8461986-903e-4ad9-8fb0-c9c09b17bb13",
 		"name": "TalaTrivia",
-		"description": "# 🚀 Inicio\n\nEn la siguiente coleccion REST API encontraras todos los endpoints disponibles para TalaTrivia.",
+		"description": "# 🚀 **Resumen de la Colección**\n\nEsta colección contiene los endpoints necesarios para interactuar con el sistema **TalaTrivia**, incluyendo la gestión de usuarios, autenticación, creación de preguntas, administración de trivias y manejo de respuestas.\n\n  \n\n### **Requisitos Previos**\n\n1. **Autenticación Obligatoria**:  \n    Es **imprescindible** ejecutar primero el endpoint `Auth > Login` para obtener el `accessToken`. Este token es requerido para autorizar todas las solicitudes posteriores. Una vez obtenido, el token se almacena como una variable de entorno (`{{accessToken}}`), y será automáticamente incluido en los encabezados de autorización de los demás endpoints.\n    \n2. **Definición de la URL Base**:  \n    Es necesario configurar la variable `{{url}}` con la URL base del sistema, ya que esta se utiliza en todos los endpoints de la colección. Asegúrate de que la variable esté correctamente configurada para garantizar el funcionamiento de las solicitudes.\n    \n\n### **Estructura de la Colección**\n\n- **Users**: Endpoints para la gestión de usuarios, incluyendo creación y listado.\n    \n- **Auth**: Endpoint de inicio de sesión para obtener el token de acceso.\n    \n- **Questions**: Gestión de preguntas, incluyendo creación y listado.\n    \n- **Trivia**: Administración de trivias, como creación, listado, trivias del usuario y consulta de rankings.\n    \n- **Answers**: Envío y validación de respuestas a preguntas en trivias.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13305902",
 		"_collection_link": "https://tactechspa.postman.co/workspace/My-Workspace~cdf363d1-e6cf-41ae-8da3-cf75a80f5d23/collection/13305902-f8461986-903e-4ad9-8fb0-c9c09b17bb13?action=share&source=collection_link&creator=13305902"
@@ -361,7 +361,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "Esta carpeta contiene los endpoints relacionados con la gestión de usuarios en el sistema. Incluye operaciones para:\n\n- Crear un nuevo usuario, especificando detalles como email, nombre, contraseña y tipo de perfil.\n    \n- Listar los usuarios existentes, con soporte para filtros y paginación.  \n    Estos endpoints requieren un token de autenticación y permisos específicos para su uso."
 		},
 		{
 			"name": "Auth",
@@ -471,7 +472,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "En esta carpeta se encuentran los endpoints relacionados con la autenticación del sistema. Contiene:\n\n- Login: Permite a los usuarios autenticarse proporcionando email y contraseña válidos, devolviendo un token de acceso para usar en otros servicios.  \n    Este token debe ser incluido en las solicitudes protegidas como `Bearer Token`."
 		},
 		{
 			"name": "Questions",
@@ -718,7 +720,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "Incluye los endpoints necesarios para administrar las preguntas del sistema. Las funcionalidades clave incluyen:\n\n- Crear una nueva pregunta, especificando el nivel de dificultad y las opciones de respuesta.\n    \n- Listar preguntas disponibles con soporte para filtros como el título.  \n    Se requiere autenticación y permisos específicos para realizar estas acciones."
 		},
 		{
 			"name": "Trivia",
@@ -1147,7 +1150,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "Esta carpeta agrupa los endpoints relacionados con la gestión de trivias. Incluye:\n\n- Crear trivias, asociando preguntas y usuarios específicos.\n    \n- Listar trivias, con opciones para filtrar por nombre.\n    \n- Obtener trivias asociadas al usuario activo.\n    \n- Consultar el ranking de usuarios para una trivia específica, mostrando puntajes y posiciones.  \n    Estos endpoints requieren autenticación y permisos específicos para cada operación.\n    \n\nEs importante destacar que para utilizar estos endpoints, debes contar con los permisos correspondientes que habiliten las acciones a realizar. Por ejemplo, para acceder al endpoint `list`, es necesario que el usuario tenga el rol de **ADMIN**, ya que este es el único rol que incluye el permiso **LIST_TRIVIA**, requerido para utilizar dicho endpoint.\n\nEn el caso del endpoint `list by user`, el sistema devolverá todas las trivias asociadas a la sesión activa del usuario."
 		},
 		{
 			"name": "Answers",
@@ -1429,7 +1433,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "Aquí encontrarás los endpoints relacionados con el manejo de respuestas en las trivias. Las funcionalidades incluyen:\n\n- Crear una respuesta a una pregunta específica dentro de una trivia.  \n    El sistema valida automáticamente si la opción seleccionada es válida, si la pregunta ya tiene una respuesta asociada y actualiza el puntaje del usuario. Estos endpoints requieren autenticación y permisos adecuados."
 		}
 	],
 	"event": [
