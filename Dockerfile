@@ -1,12 +1,32 @@
-# Usar Node.js v20 como base
-FROM node:20
+FROM node:20-alpine AS base
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm i -g pnpm
 
-WORKDIR /app 
+FROM base AS dependencies
+
+WORKDIR /app
+COPY package.json ./
+COPY prisma prisma
+
+RUN pnpm i
+
+FROM base AS build
+
+WORKDIR /app
 COPY . .
-RUN pnpm install
+COPY --from=dependencies /app/node_modules ./node_modules
+
+RUN pnpm build
+
+RUN pnpm prune --prod
+
+FROM base AS deploy
+
+WORKDIR /app
+COPY --from=build /app/dist/ ./dist/
+COPY --from=dependencies /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["pnpm", "start:dev"]
+
+CMD [ "node", "dist/src/main.js" ]
