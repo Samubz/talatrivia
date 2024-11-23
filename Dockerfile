@@ -24,9 +24,16 @@ FROM base AS deploy
 
 WORKDIR /app
 COPY --from=build /app/dist/ ./dist/
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma
 COPY --from=dependencies /app/node_modules ./node_modules
 
 EXPOSE 3000
 
 
-CMD [ "node", "dist/src/main.js" ]
+CMD ["sh", "-c", "pnpm db:deploy && node dist/src/main.js"]
+
+# Deploy with migrations phase
+FROM deploy AS deploy_with_seed
+RUN pnpm i
+CMD ["sh", "-c", "pnpm db:deploy && node dist/prisma/seed.js && node dist/src/main.js"]

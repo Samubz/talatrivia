@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: ${BUILD_TARGET:-deploy}
     platform: linux/amd64
     container_name: talatrivia
     env_file:
