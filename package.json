@@ -15,6 +15,7 @@
     "seed": "npx prisma db seed",
     "dev:db:migrate": "npx prisma migrate dev",
     "db:push": "npx prisma db push",
+    "db:deploy": "npx prisma migrate deploy",
     "start": "nest start",
     "start:dev": "pnpm run generate && nest start --watch",
     "start:debug": "pnpm run generate && nest start --debug --watch",
