@@ -3,9 +3,7 @@
 		"_postman_id": "f8461986-903e-4ad9-8fb0-c9c09b17bb13",
 		"name": "TalaTrivia",
 		"description": "# 🚀 **Resumen de la Colección**\n\nEsta colección contiene los endpoints necesarios para interactuar con el sistema **TalaTrivia**, incluyendo la gestión de usuarios, autenticación, creación de preguntas, administración de trivias y manejo de respuestas.\n\n  \n\n### **Requisitos Previos**\n\n1. **Autenticación Obligatoria**:  \n    Es **imprescindible** ejecutar primero el endpoint `Auth > Login` para obtener el `accessToken`. Este token es requerido para autorizar todas las solicitudes posteriores. Una vez obtenido, el token se almacena como una variable de entorno (`{{accessToken}}`), y será automáticamente incluido en los encabezados de autorización de los demás endpoints.\n    \n2. **Definición de la URL Base**:  \n    Es necesario configurar la variable `{{url}}` con la URL base del sistema, ya que esta se utiliza en todos los endpoints de la colección. Asegúrate de que la variable esté correctamente configurada para garantizar el funcionamiento de las solicitudes.\n    \n\n### **Estructura de la Colección**\n\n- **Users**: Endpoints para la gestión de usuarios, incluyendo creación y listado.\n    \n- **Auth**: Endpoint de inicio de sesión para obtener el token de acceso.\n    \n- **Questions**: Gestión de preguntas, incluyendo creación y listado.\n    \n- **Trivia**: Administración de trivias, como creación, listado, trivias del usuario y consulta de rankings.\n    \n- **Answers**: Envío y validación de respuestas a preguntas en trivias.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13305902",
-		"_collection_link": "https://tactechspa.postman.co/workspace/My-Workspace~cdf363d1-e6cf-41ae-8da3-cf75a80f5d23/collection/13305902-f8461986-903e-4ad9-8fb0-c9c09b17bb13?action=share&source=collection_link&creator=13305902"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
